@@ -5,7 +5,7 @@ import { useAuth } from "@/hooks/useAuth";
 import {
   LayoutDashboard, User, ClipboardList, Star, BookOpen,
   Briefcase, Building2, GitCompare, Award, Calendar, Library,
-  LogOut, Map,
+  LogOut, LogIn, Map,
 } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -93,32 +93,50 @@ export default function StudentSidebar() {
       {/* User area */}
       <div className="border-t border-[hsl(220,18%,92%)] p-3 space-y-1">
         {/* Profile row */}
-        <div className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-[hsl(36,20%,95%)] transition-colors cursor-default">
+        <div 
+          className={cn(
+            "flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-colors",
+            !user ? "cursor-pointer hover:bg-[hsl(36,20%,95%)]" : "cursor-default hover:bg-[hsl(36,20%,95%)]"
+          )}
+          onClick={() => !user && navigate("/login")}
+        >
           <Avatar className="h-8 w-8 flex-shrink-0">
             <AvatarFallback className="bg-[hsl(252,60%,94%)] text-[hsl(252,50%,45%)] text-xs font-bold">
-              {initials}
+              {user ? initials : "G"}
             </AvatarFallback>
           </Avatar>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-semibold text-[hsl(226,50%,14%)] truncate leading-tight">
-              {user?.name || "Student"}
+              {user?.name || "Guest"}
             </p>
             <p className="text-[10px] text-[hsl(220,14%,50%)] truncate leading-tight">
-              Class {user?.class || "12"} · {user?.stream || "Science"}
+              {user ? `Class ${user?.class || "12"} · ${user?.stream || "Science"}` : "Sign in to personalize"}
             </p>
           </div>
         </div>
 
-        {/* Logout */}
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={handleLogout}
-          className="w-full justify-start gap-2.5 text-[hsl(220,14%,50%)] hover:text-red-600 hover:bg-red-50 px-3 font-medium text-sm rounded-xl cursor-pointer"
-        >
-          <LogOut className="h-4 w-4" />
-          {t("logout", "Logout")}
-        </Button>
+        {/* Logout / Login */}
+        {user ? (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleLogout}
+            className="w-full justify-start gap-2.5 text-[hsl(220,14%,50%)] hover:text-red-600 hover:bg-red-50 px-3 font-medium text-sm rounded-xl cursor-pointer"
+          >
+            <LogOut className="h-4 w-4" />
+            {t("logout", "Logout")}
+          </Button>
+        ) : (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => navigate("/login")}
+            className="w-full justify-start gap-2.5 text-[hsl(226,64%,20%)] hover:text-[hsl(226,64%,20%)] hover:bg-[hsl(36,20%,95%)] px-3 font-medium text-sm rounded-xl cursor-pointer"
+          >
+            <LogIn className="h-4 w-4" />
+            {t("login", "Login")}
+          </Button>
+        )}
       </div>
     </aside>
   );

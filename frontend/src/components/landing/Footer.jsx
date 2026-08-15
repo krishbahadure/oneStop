@@ -1,24 +1,27 @@
 import { Link } from "react-router-dom";
 import { GraduationCap, Mail, Send, MessageSquare } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
-
-const footerLinks = [
-  { label: "How It Works", href: "/#how-it-works" },
-  { label: "Courses",      href: "/courses" },
-  { label: "Careers",      href: "/careers" },
-  { label: "Colleges",     href: "/colleges" },
-  { label: "Scholarships", href: "/scholarships" },
-];
-
-const studentLinks = [
-  { label: "Take Assessment",     href: "/assessment" },
-  { label: "Browse Colleges",     href: "/colleges" },
-  { label: "Find Scholarships",   href: "/scholarships" },
-  { label: "Admission Timeline",  href: "/timeline" },
-  { label: "Learning Resources",  href: "/resources" },
-];
+import { useTranslation } from "react-i18next";
 
 export default function Footer() {
+  const { t } = useTranslation();
+
+  const footerLinks = [
+    { labelKey: "footer_link_how_it_works", href: "/#how-it-works" },
+    { labelKey: "footer_link_courses",      href: "/courses" },
+    { labelKey: "footer_link_careers",      href: "/careers" },
+    { labelKey: "footer_link_colleges",     href: "/colleges" },
+    { labelKey: "footer_link_scholarships", href: "/scholarships" },
+  ];
+
+  const studentLinks = [
+    { labelKey: "footer_link_assessment",        href: "/assessment" },
+    { labelKey: "footer_link_browse_colleges",   href: "/colleges" },
+    { labelKey: "footer_link_find_scholarships", href: "/scholarships" },
+    { labelKey: "footer_link_timeline",          href: "/timeline" },
+    { labelKey: "footer_link_resources",         href: "/resources" },
+  ];
+
   return (
     <footer className="bg-[hsl(226,45%,12%)] text-white">
       <div className="max-w-7xl mx-auto px-5 sm:px-8 py-14">
@@ -31,12 +34,11 @@ export default function Footer() {
               </div>
               <div>
                 <span className="font-black text-base block leading-none tracking-tight">ONE STOP</span>
-                <span className="text-[9px] text-white/50 font-medium">Personalized Career & Education Advisor</span>
+                <span className="text-[9px] text-white/50 font-medium">{t("footer_tagline", "Personalized Career & Education Advisor")}</span>
               </div>
             </div>
             <p className="text-white/55 text-sm leading-relaxed max-w-sm">
-              Helping students in Jammu & Kashmir discover the right path through
-              personalized career guidance, college exploration, and scholarship opportunities.
+              {t("footer_desc", "Helping students in Jammu & Kashmir discover the right path through personalized career guidance, college exploration, and scholarship opportunities.")}
             </p>
             <div className="flex items-center gap-2.5 mt-5">
               {[MessageSquare, Send, Mail].map((Icon, i) => (
@@ -53,12 +55,12 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h4 className="font-semibold text-white text-sm mb-4">Quick Links</h4>
+            <h4 className="font-semibold text-white text-sm mb-4">{t("footer_quick_links", "Quick Links")}</h4>
             <ul className="space-y-2.5">
               {footerLinks.map((link) => (
                 <li key={link.href}>
                   <Link to={link.href} className="text-white/55 hover:text-white text-sm transition-colors">
-                    {link.label}
+                    {t(link.labelKey)}
                   </Link>
                 </li>
               ))}
@@ -67,12 +69,12 @@ export default function Footer() {
 
           {/* For Students */}
           <div>
-            <h4 className="font-semibold text-white text-sm mb-4">For Students</h4>
+            <h4 className="font-semibold text-white text-sm mb-4">{t("footer_for_students", "For Students")}</h4>
             <ul className="space-y-2.5">
               {studentLinks.map((link) => (
                 <li key={link.href}>
                   <Link to={link.href} className="text-white/55 hover:text-white text-sm transition-colors">
-                    {link.label}
+                    {t(link.labelKey)}
                   </Link>
                 </li>
               ))}
@@ -83,8 +85,8 @@ export default function Footer() {
         <Separator className="bg-white/10 my-10" />
 
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-white/35">
-          <p>© 2026 One Stop. All rights reserved. Prototype — Not a government product.</p>
-          <p>Built for students in <span className="text-white/60 font-medium">Jammu & Kashmir</span></p>
+          <p>{t("footer_copyright", "© 2026 One Stop. All rights reserved. Prototype — Not a government product.")}</p>
+          <p>{t("footer_built_for", "Built for students in")} <span className="text-white/60 font-medium">{t("footer_jk", "Jammu & Kashmir")}</span></p>
         </div>
       </div>
     </footer>

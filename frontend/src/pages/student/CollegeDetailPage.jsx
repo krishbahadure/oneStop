@@ -1,5 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import StudentLayout from "@/components/layout/StudentLayout";
@@ -15,25 +16,17 @@ import {
 } from "lucide-react";
 import toast from "react-hot-toast";
 
-const facilityIcons = {
-  hostel: { icon: Home, label: "Hostel" },
-  library: { icon: BookOpen, label: "Library" },
-  labs: { icon: FlaskConical, label: "Labs" },
-  internet: { icon: Wifi, label: "Internet" },
-  sports: { icon: Dumbbell, label: "Sports" },
-  canteen: { icon: Coffee, label: "Canteen" },
-};
-
 export default function CollegeDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const college = getCollegeById(id);
   const { isInComparison, addToComparison, removeFromComparison } = useComparison();
 
   if (!college) {
     return (
-      <StudentLayout>
-        <EmptyState icon={Building2} title="College not found" action={<Button onClick={() => navigate("/colleges")}>Back to Colleges</Button>} className="min-h-screen" />
+      <StudentLayout requireAuth={false}>
+        <EmptyState icon={Building2} title={t("college_det_not_found")} action={<Button onClick={() => navigate("/colleges")}>{t("college_det_back")}</Button>} className="min-h-screen" />
       </StudentLayout>
     );
   }
@@ -41,29 +34,38 @@ export default function CollegeDetailPage() {
   const handleCompare = () => {
     if (isInComparison(college.id)) {
       removeFromComparison(college.id);
-      toast.success(`Removed ${college.shortName} from comparison`);
+      toast.success(`${t("college_det_removed")} ${college.shortName} ${t("college_det_from_comp")}`);
     } else {
       const added = addToComparison(college.id);
-      if (!added) toast.error("You can compare up to 3 colleges at a time");
-      else toast.success(`Added ${college.shortName}! Go to Compare Colleges to view.`);
+      if (!added) toast.error(t("college_det_max_comp"));
+      else toast.success(`${t("college_det_added")} ${college.shortName}${t("college_det_go_comp")}`);
     }
   };
 
   const inComparison = isInComparison(college.id);
 
+  const facilityIcons = {
+    hostel: { icon: Home, label: t("facility_hostel") },
+    library: { icon: BookOpen, label: t("facility_library") },
+    labs: { icon: FlaskConical, label: t("facility_labs") },
+    internet: { icon: Wifi, label: t("facility_internet") },
+    sports: { icon: Dumbbell, label: t("facility_sports") },
+    canteen: { icon: Coffee, label: t("facility_canteen") },
+  };
+
   return (
-    <StudentLayout>
+    <StudentLayout requireAuth={false}>
       <div className="min-h-full bg-[hsl(36,33%,97%)] pb-10">
         {/* Header */}
         <div className="bg-white px-6 py-10">
           <div className="max-w-4xl mx-auto">
-            <Button variant="ghost" size="sm" onClick={() => navigate("/colleges")} className="text-white/70 hover:text-white hover:bg-white/10 mb-4 -ml-2">
-              <ArrowLeft className="mr-1 h-4 w-4" /> Back to Colleges
+            <Button variant="ghost" size="sm" onClick={() => navigate("/colleges")} className="text-[hsl(220,14%,50%)] hover:text-foreground mb-4 -ml-2">
+              <ArrowLeft className="mr-1 h-4 w-4" /> {t("college_det_back")}
             </Button>
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div className="flex items-start gap-4">
-                <div className="w-14 h-14 rounded-2xl bg-white/15 flex items-center justify-center flex-shrink-0">
-                  <Building2 className="h-7 w-7 text-white" />
+                <div className="w-14 h-14 rounded-2xl bg-[hsl(252,50%,95%)] flex items-center justify-center flex-shrink-0">
+                  <Building2 className="h-7 w-7 text-[hsl(252,50%,45%)]" />
                 </div>
                 <div>
                   <div className="flex items-center gap-2 mb-1">
@@ -74,10 +76,10 @@ export default function CollegeDetailPage() {
                     <MapPin className="h-3.5 w-3.5" /> {college.district} · {college.distance}
                   </div>
                   <div className="flex items-center gap-2 mt-2">
-                    <Badge className={`text-xs ${college.admissionStatus === "Applications Open" ? "bg-emerald-500/20 text-emerald-200" : "bg-white/10 text-white"}`}>
+                    <Badge className={`text-xs ${college.admissionStatus === "Applications Open" ? "bg-emerald-500/20 text-emerald-700 border border-emerald-200" : "bg-[hsl(220,18%,93%)] text-[hsl(220,14%,50%)]"}`}>
                       {college.admissionStatus}
                     </Badge>
-                    <span className="text-[hsl(220,14%,50%)] text-xs">Est. {college.established}</span>
+                    <span className="text-[hsl(220,14%,50%)] text-xs">{t("colleges_est")} {college.established}</span>
                   </div>
                 </div>
               </div>
@@ -85,10 +87,10 @@ export default function CollegeDetailPage() {
                 <Button
                   variant="outline"
                   onClick={handleCompare}
-                  className={cn("border-white/30 text-white hover:bg-white/10 bg-transparent", inComparison && "border-white bg-white/10")}
+                  className={cn("bg-white", inComparison && "border-[hsl(252,50%,45%)] text-[hsl(252,50%,45%)]")}
                 >
                   <GitCompare className="mr-1.5 h-4 w-4" />
-                  {inComparison ? "Added to Compare" : "Add to Compare"}
+                  {inComparison ? t("college_det_added_comp") : t("college_det_add_comp")}
                 </Button>
               </div>
             </div>
@@ -98,19 +100,19 @@ export default function CollegeDetailPage() {
         <div className="max-w-4xl mx-auto px-4 py-8 space-y-6">
           {/* Overview */}
           <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-2xl border border-[hsl(220,18%,91%)] p-6">
-            <h2 className="text-lg font-bold mb-3">About</h2>
+            <h2 className="text-lg font-bold mb-3">{t("college_det_about")}</h2>
             <p className="text-muted-foreground leading-relaxed mb-4">{college.description}</p>
             <div className="grid sm:grid-cols-3 gap-4 pt-4 border-t border-[hsl(220,18%,91%)]">
               <div>
-                <span className="text-xs text-muted-foreground">Affiliated To</span>
+                <span className="text-xs text-muted-foreground">{t("college_det_affiliated")}</span>
                 <p className="text-sm font-medium mt-0.5">{college.affiliatedTo}</p>
               </div>
               <div>
-                <span className="text-xs text-muted-foreground">Medium of Instruction</span>
+                <span className="text-xs text-muted-foreground">{t("college_det_medium")}</span>
                 <p className="text-sm font-medium mt-0.5">{college.medium}</p>
               </div>
               <div>
-                <span className="text-xs text-muted-foreground">Total Students</span>
+                <span className="text-xs text-muted-foreground">{t("college_det_students")}</span>
                 <p className="text-sm font-medium mt-0.5">{college.totalStudents}</p>
               </div>
             </div>
@@ -119,7 +121,7 @@ export default function CollegeDetailPage() {
           {/* Courses & Cutoffs */}
           <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="bg-white rounded-2xl border border-[hsl(220,18%,91%)] p-6">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-bold">Courses Offered</h2>
+              <h2 className="text-lg font-bold">{t("college_det_courses_offered")}</h2>
               <PrototypeBadge />
             </div>
             <div className="space-y-3">
@@ -131,7 +133,7 @@ export default function CollegeDetailPage() {
                   </div>
                   {college.previousCutoff?.[course] && (
                     <div className="text-right">
-                      <span className="text-xs text-muted-foreground">Previous cutoff</span>
+                      <span className="text-xs text-muted-foreground">{t("college_det_prev_cutoff")}</span>
                       <p className="text-sm font-bold text-[hsl(226,64%,20%)]">{college.previousCutoff[course]}</p>
                     </div>
                   )}
@@ -139,13 +141,13 @@ export default function CollegeDetailPage() {
               ))}
             </div>
             <p className="text-xs text-muted-foreground mt-3 pt-3 border-t border-[hsl(220,18%,91%)]">
-              * Cutoff percentages are indicative prototype data only. Verify with the college directly.
+              {t("college_det_cutoff_disclaimer")}
             </p>
           </motion.div>
 
           {/* Facilities */}
           <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="bg-white rounded-2xl border border-[hsl(220,18%,91%)] p-6">
-            <h2 className="text-lg font-bold mb-4">Facilities</h2>
+            <h2 className="text-lg font-bold mb-4">{t("college_det_facilities")}</h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               {Object.entries(facilityIcons).map(([key, { icon: Icon, label }]) => {
                 const available = college.facilities[key];
@@ -165,7 +167,7 @@ export default function CollegeDetailPage() {
 
           {/* Eligibility */}
           <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="bg-white rounded-2xl border border-[hsl(220,18%,91%)] p-6">
-            <h2 className="text-lg font-bold mb-3">Eligibility & Admissions</h2>
+            <h2 className="text-lg font-bold mb-3">{t("college_det_eligibility_adm")}</h2>
             <div className="bg-[hsl(252,60%,96%)] rounded-xl p-4 border border-blue-100">
               <p className="text-sm text-blue-900 font-medium">{college.eligibility}</p>
             </div>
@@ -178,15 +180,15 @@ export default function CollegeDetailPage() {
               onClick={() => navigate("/timeline")}
             >
               <Calendar className="h-4 w-4" />
-              View Admission Timeline
+              {t("college_det_view_timeline")}
             </Button>
             <Button
               variant="outline"
               onClick={handleCompare}
-              className={inComparison ? "border-blue-500 text-[hsl(252,50%,45%)]" : ""}
+              className={inComparison ? "border-blue-500 text-[hsl(252,50%,45%)] bg-white" : "bg-white"}
             >
               <GitCompare className="mr-1.5 h-4 w-4" />
-              {inComparison ? "Remove from Compare" : "Add to Compare"}
+              {inComparison ? t("college_det_remove_comp") : t("college_det_add_comp")}
             </Button>
           </div>
         </div>
@@ -194,7 +196,3 @@ export default function CollegeDetailPage() {
     </StudentLayout>
   );
 }
-
-
-
-

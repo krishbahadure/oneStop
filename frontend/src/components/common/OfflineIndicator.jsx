@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import { WifiOff } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 
 export function OfflineIndicator() {
   const [isOffline, setIsOffline] = useState(!navigator.onLine);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const handleOnline = () => setIsOffline(false);
@@ -29,7 +31,7 @@ export function OfflineIndicator() {
         >
           <div className="bg-red-500 text-white px-4 py-2 rounded-full shadow-lg flex items-center gap-2 text-sm font-semibold">
             <WifiOff className="h-4 w-4" />
-            You are currently offline
+            {t("offline_message", "You are currently offline")}
           </div>
         </motion.div>
       )}

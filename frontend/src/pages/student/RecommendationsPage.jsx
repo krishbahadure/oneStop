@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import StudentLayout from "@/components/layout/StudentLayout";
 import { useApiData } from "@/hooks/useApiData";
@@ -21,9 +22,10 @@ const recConfig = [
 
 export default function RecommendationsPage() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { data, loading, error, refetch } = useApiData("/recommendations");
 
-  if (loading) return <StudentLayout><PageLoader message="Calculating your recommendations…" /></StudentLayout>;
+  if (loading) return <StudentLayout><PageLoader message={t("rec_loading")} /></StudentLayout>;
   if (error) return <StudentLayout><PageError error={error} onRetry={refetch} /></StudentLayout>;
 
   const { streams = [], courses = [], careers = [] } = data || {};
@@ -35,15 +37,15 @@ export default function RecommendationsPage() {
     <StudentLayout>
       <div className="min-h-full bg-[hsl(36,33%,97%)]">
         <div className="bg-white border-b border-[hsl(220,18%,91%)] px-8 py-5">
-          <h1 className="text-2xl font-black text-[hsl(226,64%,14%)]">Your Personalized Recommendations</h1>
-          <p className="text-sm text-[hsl(220,14%,50%)] mt-0.5">Based on your assessment scores and profile · Rule-based engine (prototype)</p>
+          <h1 className="text-2xl font-black text-[hsl(226,64%,14%)]">{t("rec_title")}</h1>
+          <p className="text-sm text-[hsl(220,14%,50%)] mt-0.5">{t("rec_subtitle")}</p>
         </div>
 
         <div className="px-8 py-6 max-w-[1200px] space-y-8">
           {/* Streams */}
           <motion.div {...fadeUp(0.05)}>
             <h2 className="font-bold text-[hsl(226,64%,14%)] mb-4 flex items-center gap-2">
-              <BarChart2 className="h-4.5 w-4.5 text-[hsl(252,50%,45%)]" /> Recommended Streams
+              <BarChart2 className="h-4.5 w-4.5 text-[hsl(252,50%,45%)]" /> {t("rec_streams")}
             </h2>
             <div className="grid md:grid-cols-3 gap-4">
               {topStreams.map((stream, i) => {
@@ -52,12 +54,12 @@ export default function RecommendationsPage() {
                   <div key={stream.streamId} className="bg-white border border-[hsl(220,18%,91%)] rounded-2xl p-5">
                     <div className="flex items-center justify-between mb-3">
                       <div className={`px-3 py-1 rounded-full text-xs font-bold ${chipClass}`}>{stream.streamName}</div>
-                      {i === 0 && <span className="text-[10px] font-bold chip-lavender px-2 py-0.5 rounded-full">Best Match</span>}
+                      {i === 0 && <span className="text-[10px] font-bold chip-lavender px-2 py-0.5 rounded-full">{t("rec_best_match")}</span>}
                     </div>
                     <p className="text-xs text-[hsl(220,14%,50%)] mb-3 leading-relaxed">{stream.description}</p>
                     <div className="mb-3">
                       <div className="flex justify-between text-xs mb-1">
-                        <span className="text-[hsl(220,14%,55%)]">Match Score</span>
+                        <span className="text-[hsl(220,14%,55%)]">{t("rec_match_score")}</span>
                         <span className="font-bold text-[hsl(226,64%,20%)]">{stream.matchPercent}%</span>
                       </div>
                       <div className="h-2 rounded-full bg-[hsl(220,18%,93%)] overflow-hidden">
@@ -86,10 +88,10 @@ export default function RecommendationsPage() {
           <motion.div {...fadeUp(0.1)}>
             <div className="flex items-center justify-between mb-4">
               <h2 className="font-bold text-[hsl(226,64%,14%)] flex items-center gap-2">
-                <BookOpen className="h-4.5 w-4.5 text-[hsl(252,50%,45%)]" /> Recommended Courses
+                <BookOpen className="h-4.5 w-4.5 text-[hsl(252,50%,45%)]" /> {t("rec_courses")}
               </h2>
               <Button variant="ghost" size="sm" onClick={() => navigate("/courses")} className="text-[hsl(252,50%,45%)] text-xs gap-1 pr-0">
-                View all <ArrowRight className="h-3.5 w-3.5" />
+                {t("rec_view_all")} <ArrowRight className="h-3.5 w-3.5" />
               </Button>
             </div>
             <div className="grid md:grid-cols-3 gap-4">
@@ -99,12 +101,12 @@ export default function RecommendationsPage() {
                   <div key={course.id} className="bg-white border border-[hsl(220,18%,91%)] rounded-2xl p-4 cursor-pointer hover:shadow-md transition-shadow" onClick={() => navigate(`/courses/${course.id}`)}>
                     <div className="flex items-center justify-between mb-2">
                       <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${cfg.matchChip}`}>{course.stream_name}</span>
-                      {course.isRecommended && <span className="text-[9px] font-bold chip-mint px-2 py-0.5 rounded-full">Recommended</span>}
+                      {course.isRecommended && <span className="text-[9px] font-bold chip-mint px-2 py-0.5 rounded-full">{t("rec_recommended")}</span>}
                     </div>
                     <h3 className="font-bold text-sm text-[hsl(226,64%,14%)] leading-tight mb-1">{course.name}</h3>
                     <p className="text-xs text-[hsl(220,14%,50%)] mb-2">{course.duration} · {course.degree_type}</p>
                     <div className="flex justify-between text-xs mb-1">
-                      <span className="text-[hsl(220,14%,55%)]">Match</span>
+                      <span className="text-[hsl(220,14%,55%)]">{t("rec_match")}</span>
                       <span className="font-bold text-[hsl(226,64%,20%)]">{course.matchPercent}%</span>
                     </div>
                     <div className="h-1.5 rounded-full bg-[hsl(220,18%,93%)] overflow-hidden">
@@ -120,10 +122,10 @@ export default function RecommendationsPage() {
           <motion.div {...fadeUp(0.15)}>
             <div className="flex items-center justify-between mb-4">
               <h2 className="font-bold text-[hsl(226,64%,14%)] flex items-center gap-2">
-                <Briefcase className="h-4.5 w-4.5 text-[hsl(252,50%,45%)]" /> Career Pathways
+                <Briefcase className="h-4.5 w-4.5 text-[hsl(252,50%,45%)]" /> {t("rec_careers")}
               </h2>
               <Button variant="ghost" size="sm" onClick={() => navigate("/careers")} className="text-[hsl(252,50%,45%)] text-xs gap-1 pr-0">
-                Explore all <ArrowRight className="h-3.5 w-3.5" />
+                {t("rec_explore_all")} <ArrowRight className="h-3.5 w-3.5" />
               </Button>
             </div>
             <div className="grid md:grid-cols-2 gap-4">
@@ -142,7 +144,7 @@ export default function RecommendationsPage() {
                       ₹{((career.salary_min || 0) / 100000).toFixed(1)}–{((career.salary_max || 0) / 100000).toFixed(1)} LPA
                     </span>
                     <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${career.growth_outlook === 'High' ? 'chip-mint' : 'chip-yellow'}`}>
-                      {career.growth_outlook} Growth
+                      {career.growth_outlook} {t("rec_growth")}
                     </span>
                   </div>
                 </div>

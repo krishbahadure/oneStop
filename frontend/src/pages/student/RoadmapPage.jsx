@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import StudentLayout from "@/components/layout/StudentLayout";
 import { useApiData } from "@/hooks/useApiData";
@@ -9,12 +10,6 @@ import { Map, CheckCircle, Circle, Loader2, ArrowRight } from "lucide-react";
 import api from "@/api/client";
 import toast from "react-hot-toast";
 import { cn } from "@/lib/utils";
-
-const statusStyles = {
-  completed:   { icon: CheckCircle, chip: "chip-mint", label: "Completed" },
-  in_progress: { icon: Loader2,     chip: "chip-yellow", label: "In Progress" },
-  pending:     { icon: Circle,      chip: "chip-blue",  label: "Pending" },
-};
 
 const catColors = {
   Profile:     "bg-[hsl(252,60%,94%)] text-[hsl(252,50%,40%)]",
@@ -27,10 +22,17 @@ const catColors = {
 
 export default function RoadmapPage() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { data, loading, error, refetch } = useApiData("/roadmap");
   const [updating, setUpdating] = useState(null);
 
-  if (loading) return <StudentLayout><PageLoader message="Loading your roadmap…" /></StudentLayout>;
+  const statusStyles = {
+    completed:   { icon: CheckCircle, chip: "chip-mint", label: t("roadmap_status_completed") },
+    in_progress: { icon: Loader2,     chip: "chip-yellow", label: t("roadmap_status_in_progress") },
+    pending:     { icon: Circle,      chip: "chip-blue",  label: t("roadmap_status_pending") },
+  };
+
+  if (loading) return <StudentLayout><PageLoader message={t("roadmap_loading")} /></StudentLayout>;
   if (error) return <StudentLayout><PageError error={error} onRetry={refetch} /></StudentLayout>;
 
   const { items = [], progressPct = 0, completed = 0, total = 0 } = data || {};
@@ -40,7 +42,7 @@ export default function RoadmapPage() {
     const { error: err } = await api.put(`/roadmap/${id}`, { status });
     setUpdating(null);
     if (err) { toast.error(err); return; }
-    toast.success("Step updated!");
+    toast.success(t("roadmap_step_updated"));
     refetch();
   };
 
@@ -51,13 +53,13 @@ export default function RoadmapPage() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-2xl font-black text-[hsl(226,64%,14%)] flex items-center gap-2">
-                <Map className="h-5 w-5 text-[hsl(252,50%,45%)]" /> My Roadmap
+                <Map className="h-5 w-5 text-[hsl(252,50%,45%)]" /> {t("roadmap_title")}
               </h1>
-              <p className="text-sm text-[hsl(220,14%,50%)] mt-0.5">Your personalized 10-step journey to the right career and college</p>
+              <p className="text-sm text-[hsl(220,14%,50%)] mt-0.5">{t("roadmap_subtitle")}</p>
             </div>
             <div className="text-right">
               <div className="text-2xl font-black text-[hsl(226,64%,14%)]">{progressPct}%</div>
-              <div className="text-xs text-[hsl(220,14%,50%)]">{completed}/{total} steps complete</div>
+              <div className="text-xs text-[hsl(220,14%,50%)]">{completed}/{total} {t("roadmap_steps_complete")}</div>
             </div>
           </div>
 
@@ -99,8 +101,8 @@ export default function RoadmapPage() {
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1 flex-wrap">
-                          <span className="text-xs font-black text-[hsl(220,14%,55%)]">Step {item.step_number}</span>
-                          <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${catColor}`}>{item.category}</span>
+                          <span className="text-xs font-black text-[hsl(220,14%,55%)]">{t("roadmap_step")} {item.step_number}</span>
+                          <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${catColor}`}>{t(item.category)}</span>
                           <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${style.chip}`}>{style.label}</span>
                         </div>
                         <h3 className="font-bold text-sm text-[hsl(226,64%,14%)] leading-tight">{item.title}</h3>
@@ -112,7 +114,7 @@ export default function RoadmapPage() {
                           <Button size="sm" variant="outline"
                             onClick={() => navigate(item.link)}
                             className="text-xs gap-1 border-[hsl(220,18%,88%)] text-[hsl(226,64%,20%)] h-8">
-                            Go <ArrowRight className="h-3 w-3" />
+                            {t("roadmap_go")} <ArrowRight className="h-3 w-3" />
                           </Button>
                         )}
                         {item.status !== 'completed' && (
@@ -120,7 +122,7 @@ export default function RoadmapPage() {
                             onClick={() => updateStatus(item.id, item.status === 'in_progress' ? 'completed' : 'in_progress')}
                             disabled={isUpdating}
                             className="text-xs bg-[hsl(226,64%,20%)] hover:bg-[hsl(226,64%,15%)] text-white h-8">
-                            {item.status === 'in_progress' ? 'Mark Done' : 'Start'}
+                            {item.status === 'in_progress' ? t("roadmap_mark_done") : t("roadmap_start")}
                           </Button>
                         )}
                       </div>
@@ -133,7 +135,7 @@ export default function RoadmapPage() {
 
           <div className="mt-8 text-center">
             <p className="text-xs text-[hsl(220,14%,50%)]">
-              Your roadmap is personalized based on your profile and assessment. Complete each step to reach your goal.
+              {t("roadmap_footer_text")}
             </p>
           </div>
         </div>

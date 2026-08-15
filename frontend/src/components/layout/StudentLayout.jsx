@@ -7,7 +7,7 @@ import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { OneStopLogo } from "@/components/layout/PublicNavbar";
 
-export default function StudentLayout({ children }) {
+export default function StudentLayout({ children, requireAuth = true }) {
   const [open, setOpen] = useState(false);
   const { user, loading } = useAuth();
   const { pathname } = useLocation();
@@ -20,7 +20,7 @@ export default function StudentLayout({ children }) {
     );
   }
 
-  if (!user) {
+  if (requireAuth && !user) {
     return <Navigate to="/login" state={{ from: pathname }} replace />;
   }
 

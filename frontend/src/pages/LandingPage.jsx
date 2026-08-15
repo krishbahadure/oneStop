@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import PublicNavbar from "@/components/layout/PublicNavbar";
 import Footer from "@/components/landing/Footer";
@@ -10,32 +11,6 @@ import {
 } from "lucide-react";
 
 /* ─── Data ──────────────────────────────────────── */
-const journey = [
-  { num: "01", icon: Brain,      title: "Discover Yourself",   desc: "Understand your interests, strengths and academic preferences.", chip: "chip-lavender" },
-  { num: "02", icon: Star,       title: "Find Your Path",       desc: "Discover courses and career paths that align with your profile.", chip: "chip-mint"     },
-  { num: "03", icon: Building2,  title: "Explore Colleges",     desc: "Find and compare suitable government colleges near you.",         chip: "chip-yellow"  },
-  { num: "04", icon: Calendar,   title: "Plan Your Future",     desc: "Track admissions, scholarships and important opportunities.",     chip: "chip-blue"    },
-];
-
-const features = [
-  { icon: Brain,      title: "Aptitude & Interest Assessment",   desc: "Understand your strengths with scientific assessments.",       chip: "chip-lavender" },
-  { icon: Star,       title: "Personalized Recommendations",      desc: "Get recommendations that match your profile.",                 chip: "chip-mint"     },
-  { icon: Map,        title: "Course → Career Mapping",           desc: "See how courses lead to meaningful careers.",                  chip: "chip-blue"     },
-  { icon: Building2,  title: "Government College Finder",         desc: "Discover government colleges across Jammu & Kashmir.",         chip: "chip-yellow"   },
-  { icon: GitCompare, title: "College Comparison",                desc: "Compare colleges based on courses, facilities, cut-offs.",     chip: "chip-orange"   },
-  { icon: Award,      title: "Scholarships",                      desc: "Find and track scholarships you are eligible for.",            chip: "chip-peach"    },
-  { icon: Calendar,   title: "Admission Timeline",                desc: "Never miss important deadlines and admission updates.",        chip: "chip-orange"   },
-  { icon: BookMarked, title: "Learning Resources",                desc: "Access study materials, e-books and free learning resources.", chip: "chip-lavender" },
-];
-
-/* Feature chips shown alongside the illustration */
-const heroFeatureCards = [
-  { icon: BookOpen,  label: "Courses",      chip: "chip-lavender" },
-  { icon: Building2, label: "Colleges",     chip: "chip-mint"     },
-  { icon: Briefcase, label: "Careers",      chip: "chip-yellow"   },
-  { icon: Award,     label: "Scholarships", chip: "chip-blue"     },
-];
-
 const fadeUp = {
   initial: { opacity: 0, y: 24 },
   whileInView: { opacity: 1, y: 0 },
@@ -45,6 +20,33 @@ const fadeUp = {
 
 export default function LandingPage() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
+
+  const journey = [
+    { num: "01", icon: Brain,      title: t("landing_journey1_title"),   desc: t("landing_journey1_desc"), chip: "chip-lavender" },
+    { num: "02", icon: Star,       title: t("landing_journey2_title"),       desc: t("landing_journey2_desc"), chip: "chip-mint"     },
+    { num: "03", icon: Building2,  title: t("landing_journey3_title"),     desc: t("landing_journey3_desc"),         chip: "chip-yellow"  },
+    { num: "04", icon: Calendar,   title: t("landing_journey4_title"),     desc: t("landing_journey4_desc"),     chip: "chip-blue"    },
+  ];
+
+  const features = [
+    { icon: Brain,      title: t("landing_feature1_title"),   desc: t("landing_feature1_desc"),       chip: "chip-lavender" },
+    { icon: Star,       title: t("landing_feature2_title"),      desc: t("landing_feature2_desc"),                 chip: "chip-mint"     },
+    { icon: Map,        title: t("landing_feature3_title"),           desc: t("landing_feature3_desc"),                  chip: "chip-blue"     },
+    { icon: Building2,  title: t("landing_feature4_title"),         desc: t("landing_feature4_desc"),         chip: "chip-yellow"   },
+    { icon: GitCompare, title: t("landing_feature5_title"),                desc: t("landing_feature5_desc"),     chip: "chip-orange"   },
+    { icon: Award,      title: t("landing_feature6_title"),                      desc: t("landing_feature6_desc"),            chip: "chip-peach"    },
+    { icon: Calendar,   title: t("landing_feature7_title"),                desc: t("landing_feature7_desc"),        chip: "chip-orange"   },
+    { icon: BookMarked, title: t("landing_feature8_title"),                desc: t("landing_feature8_desc"), chip: "chip-lavender" },
+  ];
+
+  /* Feature chips shown alongside the illustration */
+  const heroFeatureCards = [
+    { icon: BookOpen,  label: t("courses"),      chip: "chip-lavender" },
+    { icon: Building2, label: t("colleges"),     chip: "chip-mint"     },
+    { icon: Briefcase, label: t("careers"),      chip: "chip-yellow"   },
+    { icon: Award,     label: t("scholarships"), chip: "chip-blue"     },
+  ];
 
   return (
     <div className="min-h-screen bg-[hsl(36,33%,97%)]">
@@ -91,20 +93,18 @@ export default function LandingPage() {
               {/* Pill badge */}
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[hsl(44,90%,92%)] text-[hsl(44,55%,38%)] text-sm font-semibold mb-7 border border-[hsl(44,70%,82%)]">
                 <span className="text-base">✦</span>
-                <span>Your future. Our guidance.</span>
+                <span>{t("landing_hero_badge")}</span>
               </div>
 
               {/* Headline — two lines, second in lavender */}
               <h1 className="text-5xl sm:text-6xl font-black text-[hsl(226,64%,12%)] leading-[1.05] mb-6">
-                Find the right path.
+                {t("landing_hero_title_1")}
                 <br />
-                <span className="text-[hsl(252,50%,58%)]">Build your future.</span>
+                <span className="text-[hsl(252,50%,58%)]">{t("landing_hero_title_2")}</span>
               </h1>
 
               <p className="text-[hsl(220,14%,40%)] text-base leading-relaxed mb-10 max-w-[440px]">
-                One Stop helps students discover suitable courses, career paths,
-                government colleges, scholarships, and opportunities —
-                all in one place.
+                {t("landing_hero_desc")}
               </p>
 
               {/* CTAs */}
@@ -114,7 +114,7 @@ export default function LandingPage() {
                   onClick={() => navigate("/register")}
                   className="bg-[hsl(226,64%,20%)] hover:bg-[hsl(226,64%,15%)] text-white font-bold px-8 h-12 rounded-xl shadow-md text-sm"
                 >
-                  Get Started
+                  {t("getStarted")}
                 </Button>
                 <Button
                   size="lg"
@@ -122,7 +122,7 @@ export default function LandingPage() {
                   onClick={() => navigate("/colleges")}
                   className="border-[hsl(220,18%,82%)] text-[hsl(226,64%,20%)] hover:bg-[hsl(36,25%,94%)] h-12 px-6 rounded-xl font-semibold text-sm"
                 >
-                  Explore Colleges <ArrowRight className="ml-1.5 h-4 w-4" />
+                  {t("landing_btn_explore_colleges")} <ArrowRight className="ml-1.5 h-4 w-4" />
                 </Button>
               </div>
             </motion.div>
@@ -178,15 +178,14 @@ export default function LandingPage() {
       </section>
 
       {/* ─── JOURNEY ──────────────────────────────────── */}
-      <section className="py-20 bg-white">
+      <section id="journey" className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-5 sm:px-8">
           <motion.div className="text-center mb-14" {...fadeUp}>
             <h2 className="text-3xl sm:text-4xl font-black text-[hsl(226,64%,14%)] mb-3">
-              Your journey starts here
+              {t("landing_journey_heading")}
             </h2>
             <p className="text-[hsl(220,14%,45%)] text-base max-w-xl mx-auto">
-              A structured approach to help you make confident, informed decisions
-              about your education and career.
+              {t("landing_journey_subheading")}
             </p>
           </motion.div>
 
@@ -222,10 +221,10 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-5 sm:px-8">
           <motion.div className="text-center mb-14" {...fadeUp}>
             <h2 className="text-3xl sm:text-4xl font-black text-[hsl(226,64%,14%)] mb-3">
-              Everything you need to make an informed decision
+              {t("landing_features_heading")}
             </h2>
             <p className="text-[hsl(220,14%,45%)] text-base max-w-xl mx-auto">
-              One platform for career guidance, college discovery, scholarships, and more.
+              {t("landing_features_subheading")}
             </p>
           </motion.div>
 
@@ -254,27 +253,26 @@ export default function LandingPage() {
       </section>
 
       {/* ─── J&K SECTION ──────────────────────────────── */}
-      <section className="py-20 bg-white">
+      <section id="for-jk" className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-5 sm:px-8">
           <div className="bg-[hsl(226,64%,20%)] rounded-3xl p-10 lg:p-14 grid lg:grid-cols-2 gap-12 items-center overflow-hidden relative">
             <div className="absolute top-0 right-0 w-64 h-64 rounded-full bg-[hsl(252,50%,55%)] opacity-10 blur-3xl pointer-events-none" />
             <motion.div {...fadeUp}>
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 text-white/80 text-sm font-medium mb-6 border border-white/15">
-                🏔️ Made for Jammu & Kashmir
+                {t("landing_jk_badge")}
               </div>
               <h2 className="text-3xl sm:text-4xl font-black text-white mb-5 leading-tight">
-                Built specifically for students in J&K
+                {t("landing_jk_heading")}
               </h2>
               <p className="text-white/70 text-base leading-relaxed mb-8">
-                One Stop is designed to address the unique needs of students across
-                the J&K region — from Kashmir Valley to Jammu Division.
+                {t("landing_jk_desc")}
               </p>
               <Button
                 size="lg"
                 className="bg-white text-[hsl(226,64%,20%)] hover:bg-[hsl(36,33%,97%)] font-bold px-8 h-12 rounded-xl shadow-sm"
                 onClick={() => navigate("/register")}
               >
-                Start Your Journey <ArrowRight className="ml-2 h-4 w-4" />
+                {t("landing_btn_start_journey")} <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </motion.div>
 
@@ -285,12 +283,12 @@ export default function LandingPage() {
               className="grid grid-cols-1 sm:grid-cols-2 gap-3"
             >
               {[
-                "Government college discovery across all J&K districts",
-                "Localized education information and course data",
-                "J&K-specific scholarships and financial aid",
-                "Admission opportunities and deadline tracking",
-                "Designed for low-connectivity environments",
-                "Future multilingual support planned",
+                t("landing_jk_point1"),
+                t("landing_jk_point2"),
+                t("landing_jk_point3"),
+                t("landing_jk_point4"),
+                t("landing_jk_point5"),
+                t("landing_jk_point6"),
               ].map((p) => (
                 <div key={p} className="flex items-start gap-2.5 bg-white/8 backdrop-blur-sm border border-white/12 rounded-xl p-4">
                   <CheckCircle2 className="h-4 w-4 text-[hsl(158,70%,65%)] flex-shrink-0 mt-0.5" />
@@ -310,19 +308,19 @@ export default function LandingPage() {
               🎓
             </div>
             <h2 className="text-3xl sm:text-4xl font-black text-[hsl(226,64%,14%)] mb-4 leading-tight">
-              Your future starts with the right decision.
+              {t("landing_cta_heading")}
             </h2>
             <p className="text-[hsl(220,14%,45%)] mb-9 text-base">
-              Join students already discovering their best path with One Stop.
+              {t("landing_cta_subheading")}
             </p>
             <Button
               size="lg"
               className="bg-[hsl(226,64%,20%)] hover:bg-[hsl(226,64%,15%)] text-white font-bold px-10 h-13 text-base rounded-xl shadow-md"
               onClick={() => navigate("/register")}
             >
-              Get Started — It's Free
+              {t("landing_btn_get_started_free")}
             </Button>
-            <p className="text-xs text-[hsl(220,14%,55%)] mt-4">No login required to explore</p>
+            <p className="text-xs text-[hsl(220,14%,55%)] mt-4">{t("landing_cta_no_login")}</p>
           </motion.div>
         </div>
       </section>

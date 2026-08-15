@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import StudentLayout from "@/components/layout/StudentLayout";
 import { useAuth } from "@/hooks/useAuth";
@@ -15,6 +16,7 @@ const STORAGE_KEY = "onestop_assessment_answers";
 
 export default function AssessmentPage() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { completeAssessment } = useAuth();
   const { data: questions, loading, error, refetch } = useApiData("/assessment/questions");
 
@@ -30,9 +32,9 @@ export default function AssessmentPage() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(answers));
   }, [answers]);
 
-  if (loading) return <StudentLayout><PageLoader message="Loading assessment…" /></StudentLayout>;
+  if (loading) return <StudentLayout><PageLoader message={t("assess_loading")} /></StudentLayout>;
   if (error) return <StudentLayout><PageError error={error} onRetry={refetch} /></StudentLayout>;
-  if (!questions?.length) return <StudentLayout><PageLoader message="No questions found." /></StudentLayout>;
+  if (!questions?.length) return <StudentLayout><PageLoader message={t("assess_no_questions")} /></StudentLayout>;
 
   const total = questions.length;
   const question = questions[current];
@@ -44,7 +46,7 @@ export default function AssessmentPage() {
   };
 
   const goNext = () => {
-    if (!selected) { toast.error("Please select an answer to continue"); return; }
+    if (!selected) { toast.error(t("assess_select_error")); return; }
     setDirection(1);
     if (current < total - 1) setCurrent(current + 1);
     else handleSubmit();
@@ -66,7 +68,7 @@ export default function AssessmentPage() {
     }
     completeAssessment();
     localStorage.removeItem(STORAGE_KEY); // clear draft once submitted
-    toast.success("Assessment complete! Calculating your results…");
+    toast.success(t("assess_complete_toast"));
     setTimeout(() => navigate("/assessment/results"), 800);
   };
 
@@ -80,7 +82,7 @@ export default function AssessmentPage() {
           <div className="max-w-2xl mx-auto">
             <div className="flex items-center justify-between mb-3">
               <div>
-                <h1 className="font-bold text-sm text-foreground">Interest & Aptitude Assessment</h1>
+                <h1 className="font-bold text-sm text-foreground">{t("assess_title")}</h1>
                 <p className="text-xs text-muted-foreground">{question.category}</p>
               </div>
               <span className="text-sm font-semibold text-muted-foreground">
@@ -112,7 +114,7 @@ export default function AssessmentPage() {
               >
                 <div className="mb-8">
                   <div className="inline-flex items-center gap-2 bg-[hsl(252,60%,96%)] text-[hsl(226,64%,20%)] px-3 py-1 rounded-full text-xs font-semibold mb-4">
-                    Question {current + 1} · {question.category}
+                    {t("assess_question")} {current + 1} · {question.category}
                   </div>
                   <h2 className="text-2xl font-bold text-foreground leading-snug">{question.question}</h2>
                 </div>
@@ -151,7 +153,7 @@ export default function AssessmentPage() {
 
             <div className="flex items-center justify-between mt-8">
               <Button variant="outline" onClick={goPrev} disabled={current === 0} className="gap-2">
-                <ArrowLeft className="h-4 w-4" /> Previous
+                <ArrowLeft className="h-4 w-4" /> {t("assess_prev")}
               </Button>
               <div className="flex gap-1.5">
                 {questions.map((q, i) => (
@@ -161,13 +163,13 @@ export default function AssessmentPage() {
                 ))}
               </div>
               <Button onClick={goNext} disabled={submitting} className="bg-[hsl(226,64%,20%)] hover:bg-[hsl(226,64%,15%)] text-white gap-2 font-semibold">
-                {submitting ? "Submitting…" : current === total - 1 ? "Submit" : "Next"}
+                {submitting ? t("assess_submitting") : current === total - 1 ? t("assess_submit") : t("assess_next")}
                 <ArrowRight className="h-4 w-4" />
               </Button>
             </div>
 
             <p className="text-center text-xs text-muted-foreground mt-6">
-              {answeredCount} of {total} questions answered · Answers saved automatically
+              {answeredCount} {t("assess_of")} {total} {t("assess_answered_saved")}
             </p>
           </div>
         </div>

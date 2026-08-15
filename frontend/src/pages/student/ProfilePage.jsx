@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -18,26 +19,30 @@ const interests = [
   "Technology", "Mathematics", "Business", "Arts", "Science",
   "Social Science", "Creativity", "Communication",
 ];
-const careerPrefs = [
-  { id: "government", label: "Government Service", icon: "🏛️" },
-  { id: "private", label: "Private Sector", icon: "💼" },
-  { id: "entrepreneurship", label: "Entrepreneurship", icon: "🚀" },
-  { id: "higher-studies", label: "Higher Studies", icon: "🎓" },
-  { id: "not-sure", label: "Not Sure Yet", icon: "🤔" },
-];
-const subjects = ["Physics", "Chemistry", "Mathematics", "Biology", "Computer Science", "English", "Economics", "History", "Geography", "Political Science", "Business Studies", "Accountancy"];
 
-const steps = [
-  { id: "personal", label: "Personal Info", icon: User },
-  { id: "academic", label: "Academic Info", icon: BookOpen },
-  { id: "interests", label: "Interests", icon: Heart },
-  { id: "career", label: "Career Goals", icon: Target },
-];
+const subjects = ["Physics", "Chemistry", "Mathematics", "Biology", "Computer Science", "English", "Economics", "History", "Geography", "Political Science", "Business Studies", "Accountancy"];
 
 export default function ProfilePage() {
   const { user, updateProfile } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [step, setStep] = useState(0);
+
+  const steps = [
+    { id: "personal", label: t("prof_step_personal"), icon: User },
+    { id: "academic", label: t("prof_step_academic"), icon: BookOpen },
+    { id: "interests", label: t("prof_step_interests"), icon: Heart },
+    { id: "career", label: t("prof_step_career"), icon: Target },
+  ];
+  
+  const careerPrefs = [
+    { id: "government", label: t("prof_career_gov"), icon: "🏛️" },
+    { id: "private", label: t("prof_career_pvt"), icon: "💼" },
+    { id: "entrepreneurship", label: t("prof_career_ent"), icon: "🚀" },
+    { id: "higher-studies", label: t("prof_career_higher"), icon: "🎓" },
+    { id: "not-sure", label: t("prof_career_not_sure"), icon: "🤔" },
+  ];
+
   const [form, setForm] = useState({
     name: user?.name || "",
     age: user?.age || "",
@@ -77,11 +82,9 @@ export default function ProfilePage() {
     setSaving(false);
     if (error) { toast.error(error); return; }
     updateProfile(form);
-    toast.success("Profile saved! Let's take your assessment.");
+    toast.success(t("prof_saved"));
     navigate("/assessment");
   };
-
-  const progress = ((step + 1) / steps.length) * 100;
 
   return (
     <StudentLayout>
@@ -89,8 +92,8 @@ export default function ProfilePage() {
         <div className="max-w-2xl mx-auto">
           {/* Header */}
           <div className="text-center mb-10">
-            <h1 className="text-3xl font-black mb-2">Set up your profile</h1>
-            <p className="text-muted-foreground">Help us personalize your experience</p>
+            <h1 className="text-3xl font-black mb-2">{t("prof_title")}</h1>
+            <p className="text-muted-foreground">{t("prof_subtitle")}</p>
           </div>
 
           {/* Progress */}
@@ -127,31 +130,31 @@ export default function ProfilePage() {
             {/* Step 0: Personal */}
             {step === 0 && (
               <div className="space-y-5">
-                <h2 className="text-xl font-bold">Personal Information</h2>
+                <h2 className="text-xl font-bold">{t("prof_personal_info")}</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
-                    <Label htmlFor="prof-name">Full Name</Label>
-                    <Input id="prof-name" value={form.name} onChange={(e) => set("name", e.target.value)} placeholder="Your full name" className="h-11" />
+                    <Label htmlFor="prof-name">{t("prof_full_name")}</Label>
+                    <Input id="prof-name" value={form.name} onChange={(e) => set("name", e.target.value)} placeholder={t("prof_name_placeholder")} className="h-11" />
                   </div>
                   <div className="space-y-1.5">
-                    <Label htmlFor="prof-age">Age</Label>
+                    <Label htmlFor="prof-age">{t("prof_age")}</Label>
                     <Input id="prof-age" type="number" value={form.age} onChange={(e) => set("age", e.target.value)} placeholder="18" className="h-11" />
                   </div>
                   <div className="space-y-1.5">
-                    <Label>Gender</Label>
+                    <Label>{t("prof_gender")}</Label>
                     <Select value={form.gender} onValueChange={(v) => set("gender", v)}>
-                      <SelectTrigger className="h-11"><SelectValue placeholder="Select" /></SelectTrigger>
+                      <SelectTrigger className="h-11"><SelectValue placeholder={t("prof_select")} /></SelectTrigger>
                       <SelectContent>
-                        {["Male", "Female", "Other", "Prefer not to say"].map((g) => (
-                          <SelectItem key={g} value={g}>{g}</SelectItem>
+                        {[{v:"Male", k:"prof_gender_male"}, {v:"Female", k:"prof_gender_female"}, {v:"Other", k:"prof_gender_other"}, {v:"Prefer not to say", k:"prof_gender_prefer_not_to_say"}].map((g) => (
+                          <SelectItem key={g.v} value={g.v}>{t(g.k)}</SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
                   </div>
                   <div className="space-y-1.5">
-                    <Label>District</Label>
+                    <Label>{t("prof_district")}</Label>
                     <Select value={form.district} onValueChange={(v) => set("district", v)}>
-                      <SelectTrigger className="h-11"><SelectValue placeholder="Your district" /></SelectTrigger>
+                      <SelectTrigger className="h-11"><SelectValue placeholder={t("prof_district_placeholder")} /></SelectTrigger>
                       <SelectContent>
                         {districts.map((d) => <SelectItem key={d} value={d}>{d}</SelectItem>)}
                       </SelectContent>
@@ -164,33 +167,33 @@ export default function ProfilePage() {
             {/* Step 1: Academic */}
             {step === 1 && (
               <div className="space-y-5">
-                <h2 className="text-xl font-bold">Academic Information</h2>
+                <h2 className="text-xl font-bold">{t("prof_academic_info")}</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
-                    <Label>Class</Label>
+                    <Label>{t("prof_class")}</Label>
                     <Select value={form.class} onValueChange={(v) => set("class", v)}>
-                      <SelectTrigger className="h-11"><SelectValue placeholder="Current class" /></SelectTrigger>
+                      <SelectTrigger className="h-11"><SelectValue placeholder={t("prof_class_placeholder")} /></SelectTrigger>
                       <SelectContent>
-                        {["9", "10", "11", "12", "Graduate"].map((c) => <SelectItem key={c} value={c}>Class {c}</SelectItem>)}
+                        {["9", "10", "11", "12", "Graduate"].map((c) => <SelectItem key={c} value={c}>{t("prof_class")} {c}</SelectItem>)}
                       </SelectContent>
                     </Select>
                   </div>
                   <div className="space-y-1.5">
-                    <Label>Stream</Label>
+                    <Label>{t("prof_stream")}</Label>
                     <Select value={form.stream} onValueChange={(v) => set("stream", v)}>
-                      <SelectTrigger className="h-11"><SelectValue placeholder="Your stream" /></SelectTrigger>
+                      <SelectTrigger className="h-11"><SelectValue placeholder={t("prof_stream_placeholder")} /></SelectTrigger>
                       <SelectContent>
                         {["Science", "Commerce", "Arts", "Not Selected"].map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
                       </SelectContent>
                     </Select>
                   </div>
                   <div className="sm:col-span-2 space-y-1.5">
-                    <Label htmlFor="prof-marks">Percentage / CGPA (last exam)</Label>
+                    <Label htmlFor="prof-marks">{t("prof_marks")}</Label>
                     <Input id="prof-marks" type="number" value={form.marks} onChange={(e) => set("marks", e.target.value)} placeholder="e.g. 85" className="h-11 max-w-40" />
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label>Subjects (select all that apply)</Label>
+                  <Label>{t("prof_subjects")}</Label>
                   <div className="flex flex-wrap gap-2">
                     {subjects.map((s) => (
                       <button
@@ -215,8 +218,8 @@ export default function ProfilePage() {
             {/* Step 2: Interests */}
             {step === 2 && (
               <div className="space-y-5">
-                <h2 className="text-xl font-bold">What are you interested in?</h2>
-                <p className="text-muted-foreground text-sm">Select all that apply — this helps us personalize your recommendations</p>
+                <h2 className="text-xl font-bold">{t("prof_interests_title")}</h2>
+                <p className="text-muted-foreground text-sm">{t("prof_interests_desc")}</p>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                   {interests.map((interest) => (
                     <button
@@ -243,8 +246,8 @@ export default function ProfilePage() {
             {/* Step 3: Career Preferences */}
             {step === 3 && (
               <div className="space-y-5">
-                <h2 className="text-xl font-bold">What's your career direction?</h2>
-                <p className="text-muted-foreground text-sm">This helps us surface the most relevant opportunities for you</p>
+                <h2 className="text-xl font-bold">{t("prof_career_title")}</h2>
+                <p className="text-muted-foreground text-sm">{t("prof_career_desc")}</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {careerPrefs.map((pref) => (
                     <button
@@ -279,14 +282,14 @@ export default function ProfilePage() {
               onClick={() => setStep(Math.max(0, step - 1))}
               disabled={step === 0}
             >
-              Back
+              {t("prof_back")}
             </Button>
-            <div className="text-xs text-muted-foreground">Step {step + 1} of {steps.length}</div>
+            <div className="text-xs text-muted-foreground">{t("prof_step")} {step + 1} {t("prof_of")} {steps.length}</div>
             <Button
               onClick={handleNext}
               className="bg-[hsl(226,64%,20%)] hover:bg-[hsl(226,64%,15%)] font-semibold"
             >
-              {step === steps.length - 1 ? "Continue to Assessment" : "Next"}
+              {step === steps.length - 1 ? t("prof_continue") : t("prof_next")}
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </div>
@@ -295,6 +298,3 @@ export default function ProfilePage() {
     </StudentLayout>
   );
 }
-
-
-

@@ -40,11 +40,9 @@ export default function PublicNavbar() {
   const navigate = useNavigate();
 
   const navLinks = [
-    { label: t("howItWorks", "How It Works"), href: "/#how-it-works" },
-    { label: t("courses", "Courses"),         href: "/courses" },
-    { label: t("colleges", "Colleges"),       href: "/colleges" },
-    { label: t("scholarships", "Scholarships"), href: "/scholarships" },
-    { label: t("resources", "Resources"),     href: "/resources" },
+    { label: t("landing_nav_how_it_works", "How It Works"), href: "/#how-it-works" },
+    { label: t("landing_nav_journey", "The Journey"),       href: "/#journey" },
+    { label: t("landing_nav_for_jk", "For J&K"),            href: "/#for-jk" },
   ];
 
   useEffect(() => {
@@ -69,13 +67,13 @@ export default function PublicNavbar() {
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-7">
             {navLinks.map((link) => (
-              <Link
+              <a
                 key={link.href}
-                to={link.href}
+                href={link.href}
                 className="text-sm font-medium text-[hsl(220,14%,40%)] hover:text-[hsl(226,64%,20%)] transition-colors"
               >
                 {link.label}
-              </Link>
+              </a>
             ))}
           </nav>
 
@@ -114,14 +112,14 @@ export default function PublicNavbar() {
                 </div>
                 <nav className="flex flex-col gap-1">
                   {navLinks.map((link) => (
-                    <Link
+                    <a
                       key={link.href}
-                      to={link.href}
+                      href={link.href}
                       onClick={() => setOpen(false)}
                       className="text-sm font-medium text-[hsl(220,14%,40%)] hover:text-[hsl(226,64%,20%)] hover:bg-[hsl(36,33%,94%)] px-3 py-2.5 rounded-lg transition-colors"
                     >
                       {link.label}
-                    </Link>
+                    </a>
                   ))}
                 </nav>
                 <div className="flex flex-col gap-2 mt-8">

@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { RadarChart, PolarGrid, PolarAngleAxis, Radar, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Cell } from "recharts";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -11,6 +12,7 @@ const scoreColors = ["#1a56db", "#7c3aed", "#0d9488", "#d97706", "#dc2626", "#db
 
 export default function AssessmentResultsPage() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const scores = recommendations.assessmentScores;
 
   const radarData = scores.map((s) => ({ subject: s.trait, score: s.score, fullMark: 100 }));
@@ -27,9 +29,9 @@ export default function AssessmentResultsPage() {
               <div className="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center mx-auto mb-4">
                 <Star className="h-8 w-8 text-amber-300" />
               </div>
-              <h1 className="text-4xl font-black mb-3">Your Assessment Results</h1>
+              <h1 className="text-4xl font-black mb-3">{t("result_title")}</h1>
               <p className="text-[hsl(220,14%,50%)] text-lg max-w-xl mx-auto">
-                Based on your responses, here's a personalized analysis of your interests and strengths.
+                {t("result_subtitle")}
               </p>
             </motion.div>
           </div>
@@ -43,7 +45,7 @@ export default function AssessmentResultsPage() {
             transition={{ delay: 0.1 }}
             className="bg-white rounded-2xl border border-[hsl(220,18%,91%)] p-6"
           >
-            <h2 className="text-xl font-bold mb-6">Your Strength Profile</h2>
+            <h2 className="text-xl font-bold mb-6">{t("result_strength_profile")}</h2>
             <div className="space-y-4">
               {scores.map((s, i) => (
                 <div key={s.trait} className="space-y-1">
@@ -74,12 +76,12 @@ export default function AssessmentResultsPage() {
               transition={{ delay: 0.2 }}
               className="bg-white rounded-2xl border border-[hsl(220,18%,91%)] p-6"
             >
-              <h3 className="font-bold mb-4 text-base">Score Breakdown</h3>
+              <h3 className="font-bold mb-4 text-base">{t("result_score_breakdown")}</h3>
               <ResponsiveContainer width="100%" height={220}>
                 <BarChart data={scores} margin={{ top: 5, right: 5, bottom: 5, left: -20 }}>
                   <XAxis dataKey="trait" tick={{ fontSize: 10 }} tickFormatter={(v) => v.slice(0, 6)} />
                   <YAxis tick={{ fontSize: 10 }} domain={[0, 100]} />
-                  <Tooltip formatter={(v) => [`${v}%`, "Score"]} />
+                  <Tooltip formatter={(v) => [`${v}%`, t("result_score")]} />
                   <Bar dataKey="score" radius={[4, 4, 0, 0]}>
                     {scores.map((_, i) => (
                       <Cell key={i} fill={scoreColors[i]} />
@@ -96,12 +98,12 @@ export default function AssessmentResultsPage() {
               transition={{ delay: 0.3 }}
               className="bg-white rounded-2xl border border-[hsl(220,18%,91%)] p-6"
             >
-              <h3 className="font-bold mb-4 text-base">Aptitude Radar</h3>
+              <h3 className="font-bold mb-4 text-base">{t("result_radar")}</h3>
               <ResponsiveContainer width="100%" height={220}>
                 <RadarChart data={radarData}>
                   <PolarGrid stroke="#e5e7eb" />
                   <PolarAngleAxis dataKey="subject" tick={{ fontSize: 10 }} />
-                  <Radar name="Score" dataKey="score" stroke="#1a56db" fill="#1a56db" fillOpacity={0.2} />
+                  <Radar name={t("result_score")} dataKey="score" stroke="#1a56db" fill="#1a56db" fillOpacity={0.2} />
                 </RadarChart>
               </ResponsiveContainer>
             </motion.div>
@@ -114,13 +116,13 @@ export default function AssessmentResultsPage() {
             transition={{ delay: 0.35 }}
             className="bg-white rounded-2xl border border-[hsl(220,18%,91%)] p-6"
           >
-            <h2 className="text-xl font-bold mb-4">Your Top Strengths</h2>
+            <h2 className="text-xl font-bold mb-4">{t("result_top_strengths")}</h2>
             <div className="grid sm:grid-cols-3 gap-4">
               {topStrengths.map((s, i) => (
                 <div key={s.trait} className={`p-4 rounded-xl text-center ${i === 0 ? "bg-[hsl(252,60%,96%)] border-2 border-blue-200" : "bg-muted"}`}>
                   <div className="text-3xl font-black mb-1" style={{ color: scoreColors[scores.findIndex(sc => sc.trait === s.trait)] }}>{s.score}%</div>
                   <div className="font-semibold text-sm">{s.trait}</div>
-                  {i === 0 && <Badge className="mt-2 bg-blue-100 text-[hsl(226,64%,20%)] text-xs">Top Strength</Badge>}
+                  {i === 0 && <Badge className="mt-2 bg-blue-100 text-[hsl(226,64%,20%)] text-xs">{t("result_top_strength_badge")}</Badge>}
                 </div>
               ))}
             </div>
@@ -133,7 +135,7 @@ export default function AssessmentResultsPage() {
             transition={{ delay: 0.4 }}
             className="bg-white rounded-2xl border border-[hsl(220,18%,91%)] p-6"
           >
-            <h2 className="text-xl font-bold mb-4">Recommended Streams</h2>
+            <h2 className="text-xl font-bold mb-4">{t("result_rec_streams")}</h2>
             <div className="grid sm:grid-cols-2 gap-4">
               {recommendations.streams.slice(0, 2).map((stream) => (
                 <div key={stream.name} className="border border-[hsl(220,18%,91%)] rounded-xl p-4">
@@ -157,7 +159,7 @@ export default function AssessmentResultsPage() {
             transition={{ delay: 0.45 }}
             className="bg-white rounded-2xl border border-[hsl(220,18%,91%)] p-6"
           >
-            <h2 className="text-xl font-bold mb-4">Recommended Areas</h2>
+            <h2 className="text-xl font-bold mb-4">{t("result_rec_areas")}</h2>
             <div className="flex flex-wrap gap-3">
               {["Computer Science", "Data & Analytics", "Cybersecurity", "Software Engineering", "Mathematics"].map((area) => (
                 <span key={area} className="px-4 py-2 rounded-full bg-[hsl(252,60%,96%)] text-[hsl(226,64%,20%)] text-sm font-medium border border-blue-100">
@@ -171,7 +173,7 @@ export default function AssessmentResultsPage() {
           <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex gap-3">
             <AlertCircle className="h-5 w-5 text-[hsl(44,70%,38%)] flex-shrink-0 mt-0.5" />
             <p className="text-sm text-[hsl(44,50%,28%)] leading-relaxed">
-              These recommendations are designed to help you explore suitable options. They are not a fixed determination of your career — your interests and goals may evolve over time.
+              {t("result_disclaimer")}
             </p>
           </div>
 
@@ -182,7 +184,7 @@ export default function AssessmentResultsPage() {
               className="bg-[hsl(226,64%,20%)] hover:bg-[hsl(226,64%,15%)] text-white font-semibold px-10 h-12"
               onClick={() => navigate("/recommendations")}
             >
-              View My Recommendations
+              {t("result_view_rec")}
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </div>
@@ -191,7 +193,3 @@ export default function AssessmentResultsPage() {
     </StudentLayout>
   );
 }
-
-
-
-
