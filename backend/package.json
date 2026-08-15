@@ -1,0 +1,21 @@
+{
+  "name": "onestop-backend",
+  "version": "1.0.0",
+  "description": "One Stop Career & Education Advisor – Express backend (PS72 prototype)",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "start": "node --experimental-sqlite index.js",
+    "dev": "node --experimental-sqlite --watch index.js",
+    "seed": "node --experimental-sqlite db/seed.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "engines": {
+    "node": ">=22.5.0"
+  }
+}
