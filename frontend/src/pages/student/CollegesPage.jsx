@@ -6,11 +6,7 @@ import { Button } from "@/components/ui/button";
 import StudentLayout from "@/components/layout/StudentLayout";
 import { useApiData } from "@/hooks/useApiData";
 import { PageLoader, PageError, PageEmpty, VerifiedBadge } from "@/components/common/PageStates";
-import { Search, Building2, MapPin, Wifi, Star, ArrowRight, GitCompare } from "lucide-react";
-import toast from "react-hot-toast";
-
-const COMPARE_KEY = "onestop_comparison";
-const MAX_COMPARE = 3;
+import { Search, Building2, MapPin, Wifi, Star } from "lucide-react";
 
 const DISTRICTS = ["Srinagar","Baramulla","Anantnag","Jammu","Kupwara","Pulwama","Budgam","Bandipora","Ganderbal","Kulgam","Shopian","Doda","Poonch","Rajouri","Udhampur","Kathua","Reasi","Samba","Kishtwar","Ramban"];
 
@@ -22,10 +18,6 @@ export default function CollegesPage() {
   const [hostelOnly, setHostelOnly] = useState(false);
   const { data: colleges, loading, error, refetch } = useApiData("/colleges");
 
-  const [compareIds, setCompareIds] = useState(() => {
-    try { return JSON.parse(localStorage.getItem(COMPARE_KEY) || "[]"); } catch { return []; }
-  });
-
   if (loading) return <StudentLayout requireAuth={false}><PageLoader message={t("colleges_loading")} /></StudentLayout>;
   if (error) return <StudentLayout requireAuth={false}><PageError error={error} onRetry={refetch} /></StudentLayout>;
 
@@ -36,32 +28,13 @@ export default function CollegesPage() {
     return matchSearch && matchDist && matchHostel;
   });
 
-  const toggleCompare = (id) => {
-    let next;
-    if (compareIds.includes(id)) {
-      next = compareIds.filter(i => i !== id);
-    } else {
-      if (compareIds.length >= MAX_COMPARE) { toast.error(`${t("colleges_compare_limit_pt1")} ${MAX_COMPARE} ${t("colleges_compare_limit_pt2")}`); return; }
-      next = [...compareIds, id];
-    }
-    setCompareIds(next);
-    localStorage.setItem(COMPARE_KEY, JSON.stringify(next));
-  };
-
   return (
     <StudentLayout requireAuth={false}>
       <div className="min-h-full bg-[hsl(36,33%,97%)]">
         <div className="bg-white border-b border-[hsl(220,18%,91%)] px-8 py-5">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-black text-[hsl(226,64%,14%)]">{t("colleges_title")}</h1>
-              <p className="text-sm text-[hsl(220,14%,50%)] mt-0.5">{filtered.length} {t("colleges_found_pt1")} {MAX_COMPARE} {t("colleges_found_pt2")}</p>
-            </div>
-            {compareIds.length > 0 && (
-              <Button onClick={() => navigate("/colleges/compare")} className="bg-[hsl(226,64%,20%)] hover:bg-[hsl(226,64%,15%)] text-white gap-2">
-                <GitCompare className="h-4 w-4" /> {t("colleges_compare")} ({compareIds.length})
-              </Button>
-            )}
+          <div>
+            <h1 className="text-2xl font-black text-[hsl(226,64%,14%)]">{t("colleges_title")}</h1>
+            <p className="text-sm text-[hsl(220,14%,50%)] mt-0.5">{filtered.length} {t("colleges_found")}</p>
           </div>
         </div>
 
@@ -86,49 +59,39 @@ export default function CollegesPage() {
 
           {filtered.length === 0 ? <PageEmpty message={t("colleges_no_match")} icon={Building2} /> : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {filtered.map(college => {
-                const inCompare = compareIds.includes(college.id);
-                return (
-                  <motion.div key={college.id} initial={{opacity:0,y:12}} animate={{opacity:1,y:0}}
-                    className="bg-white border border-[hsl(220,18%,91%)] rounded-2xl p-5 flex flex-col">
-                    <div className="flex items-start justify-between mb-3">
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-1.5 mb-1">
-                          <VerifiedBadge isVerified={college.is_verified} lastUpdated={college.last_updated} />
-                          {college.naac_grade && (
-                            <span className="text-[9px] font-bold chip-lavender px-2 py-0.5 rounded-full">{t("colleges_naac")} {college.naac_grade}</span>
-                          )}
-                        </div>
-                        <h3 className="font-bold text-sm text-[hsl(226,64%,14%)] leading-tight">{college.name}</h3>
+              {filtered.map(college => (
+                <motion.div key={college.id} initial={{opacity:0,y:12}} animate={{opacity:1,y:0}}
+                  className="bg-white border border-[hsl(220,18%,91%)] rounded-2xl p-5 flex flex-col">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-1.5 mb-1">
+                        <VerifiedBadge isVerified={college.is_verified} lastUpdated={college.last_updated} />
+                        {college.naac_grade && (
+                          <span className="text-[9px] font-bold chip-lavender px-2 py-0.5 rounded-full">{t("colleges_naac")} {college.naac_grade}</span>
+                        )}
                       </div>
-                      {college.admission_status === "Applications Open" && (
-                        <span className="text-[9px] font-semibold chip-mint px-2 py-0.5 rounded-full flex-shrink-0 ml-2">{t("colleges_open")}</span>
-                      )}
+                      <h3 className="font-bold text-sm text-[hsl(226,64%,14%)] leading-tight">{college.name}</h3>
                     </div>
+                    {college.admission_status === "Applications Open" && (
+                      <span className="text-[9px] font-semibold chip-mint px-2 py-0.5 rounded-full flex-shrink-0 ml-2">{t("colleges_open")}</span>
+                    )}
+                  </div>
 
-                    <div className="flex items-center gap-1 text-xs text-[hsl(220,14%,50%)] mb-3">
-                      <MapPin className="h-3 w-3 flex-shrink-0" />
-                      <span className="truncate">{college.district}</span>
-                      {college.hostel_available ? (
-                        <span className="ml-auto flex items-center gap-0.5 text-[10px] font-semibold text-[hsl(158,50%,40%)]"><Wifi className="h-2.5 w-2.5" />{t("colleges_hostel_badge")}</span>
-                      ) : null}
-                    </div>
+                  <div className="flex items-center gap-1 text-xs text-[hsl(220,14%,50%)] mb-3">
+                    <MapPin className="h-3 w-3 flex-shrink-0" />
+                    <span className="truncate">{college.district}</span>
+                    {college.hostel_available ? (
+                      <span className="ml-auto flex items-center gap-0.5 text-[10px] font-semibold text-[hsl(158,50%,40%)]"><Wifi className="h-2.5 w-2.5" />{t("colleges_hostel_badge")}</span>
+                    ) : null}
+                  </div>
 
-                    <p className="text-xs text-[hsl(220,14%,50%)] line-clamp-2 mb-4 flex-1">{college.description}</p>
+                  <p className="text-xs text-[hsl(220,14%,50%)] line-clamp-2 mb-4 flex-1">{college.description}</p>
 
-                    <div className="flex gap-2">
-                      <Button variant="outline" size="sm" className="flex-1 text-xs" onClick={() => navigate(`/colleges/${college.id}`)}>
-                        {t("colleges_view_details")}
-                      </Button>
-                      <Button variant="outline" size="sm"
-                        className={`text-xs px-3 ${inCompare ? 'bg-[hsl(226,64%,20%)] text-white border-transparent' : ''}`}
-                        onClick={() => toggleCompare(college.id)}>
-                        <GitCompare className="h-3.5 w-3.5" />
-                      </Button>
-                    </div>
-                  </motion.div>
-                );
-              })}
+                  <Button variant="outline" size="sm" className="w-full text-xs" onClick={() => navigate(`/colleges/${college.id}`)}>
+                    {t("colleges_view_details")}
+                  </Button>
+                </motion.div>
+              ))}
             </div>
           )}
         </div>

@@ -4,9 +4,10 @@ import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
 import {
   LayoutDashboard, User, ClipboardList, Star, BookOpen,
-  Briefcase, Building2, GitCompare, Award, Calendar, Library,
+  Briefcase, Building2, Award, Calendar, Library,
   LogOut, LogIn, Map,
 } from "lucide-react";
+
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { OneStopLogo } from "@/components/layout/PublicNavbar";
@@ -22,7 +23,6 @@ const navConfig = [
   { key: "courses",         defaultLabel: "Courses",            href: "/courses",          icon: BookOpen },
   { key: "careers",         defaultLabel: "Career Paths",       href: "/careers",          icon: Briefcase },
   { key: "colleges",        defaultLabel: "Colleges",           href: "/colleges",         icon: Building2 },
-  { key: "compareColleges",  defaultLabel: "Compare Colleges",   href: "/colleges/compare", icon: GitCompare },
   { key: "scholarships",    defaultLabel: "Scholarships",       href: "/scholarships",     icon: Award },
   { key: "timeline",        defaultLabel: "Admission Timeline", href: "/timeline",         icon: Calendar },
   { key: "resources",       defaultLabel: "Learning Resources", href: "/resources",        icon: Library },
@@ -36,7 +36,7 @@ export default function StudentSidebar() {
 
   const handleLogout = () => {
     logout();
-    toast.success("Logged out successfully");
+    toast.success(t("logout_success", "Logged out successfully"));
     navigate("/");
   };
 
@@ -107,12 +107,13 @@ export default function StudentSidebar() {
           </Avatar>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-semibold text-[hsl(226,50%,14%)] truncate leading-tight">
-              {user?.name || "Guest"}
+              {user?.name || t("sidebar_guest", "Guest")}
             </p>
             <p className="text-[10px] text-[hsl(220,14%,50%)] truncate leading-tight">
-              {user ? `Class ${user?.class || "12"} · ${user?.stream || "Science"}` : "Sign in to personalize"}
+              {user ? `${t("register_class_prefix", "Class")} ${user?.class || "12"} · ${user?.stream || "Science"}` : t("sidebar_sign_in", "Sign in to personalize")}
             </p>
           </div>
+
         </div>
 
         {/* Logout / Login */}

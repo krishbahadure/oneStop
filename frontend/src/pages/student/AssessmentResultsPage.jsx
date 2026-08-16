@@ -50,7 +50,8 @@ export default function AssessmentResultsPage() {
               {scores.map((s, i) => (
                 <div key={s.trait} className="space-y-1">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-foreground">{s.trait}</span>
+                    <span className="text-sm font-medium text-foreground">{t(`trait_${s.trait.replace(/\s/g,"")}`, s.trait)}</span>
+
                     <span className="text-sm font-bold" style={{ color: scoreColors[i] }}>{s.score}%</span>
                   </div>
                   <div className="h-2.5 rounded-full bg-muted overflow-hidden">
@@ -121,7 +122,8 @@ export default function AssessmentResultsPage() {
               {topStrengths.map((s, i) => (
                 <div key={s.trait} className={`p-4 rounded-xl text-center ${i === 0 ? "bg-[hsl(252,60%,96%)] border-2 border-blue-200" : "bg-muted"}`}>
                   <div className="text-3xl font-black mb-1" style={{ color: scoreColors[scores.findIndex(sc => sc.trait === s.trait)] }}>{s.score}%</div>
-                  <div className="font-semibold text-sm">{s.trait}</div>
+                  <div className="font-semibold text-sm">{t(`trait_${s.trait.replace(/\s/g,"")}`, s.trait)}</div>
+
                   {i === 0 && <Badge className="mt-2 bg-blue-100 text-[hsl(226,64%,20%)] text-xs">{t("result_top_strength_badge")}</Badge>}
                 </div>
               ))}
@@ -161,12 +163,13 @@ export default function AssessmentResultsPage() {
           >
             <h2 className="text-xl font-bold mb-4">{t("result_rec_areas")}</h2>
             <div className="flex flex-wrap gap-3">
-              {["Computer Science", "Data & Analytics", "Cybersecurity", "Software Engineering", "Mathematics"].map((area) => (
+              {t("result_rec_areas_list").split(", ").map((area) => (
                 <span key={area} className="px-4 py-2 rounded-full bg-[hsl(252,60%,96%)] text-[hsl(226,64%,20%)] text-sm font-medium border border-blue-100">
                   {area}
                 </span>
               ))}
             </div>
+
           </motion.div>
 
           {/* Disclaimer */}

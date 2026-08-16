@@ -18,7 +18,7 @@ import CareersPage from "@/pages/student/CareersPage";
 import CareerDetailPage from "@/pages/student/CareerDetailPage";
 import CollegesPage from "@/pages/student/CollegesPage";
 import CollegeDetailPage from "@/pages/student/CollegeDetailPage";
-import CollegeComparePage from "@/pages/student/CollegeComparePage";
+
 import ScholarshipsPage from "@/pages/student/ScholarshipsPage";
 import TimelinePage from "@/pages/student/TimelinePage";
 import ResourcesPage from "@/pages/student/ResourcesPage";
@@ -68,7 +68,7 @@ export default function App() {
           <Route path="/courses/:id" element={<CourseDetailPage />} />
           <Route path="/careers" element={<CareersPage />} />
           <Route path="/careers/:id" element={<CareerDetailPage />} />
-          <Route path="/colleges/compare" element={<CollegeComparePage />} />
+
           <Route path="/colleges/:id" element={<CollegeDetailPage />} />
           <Route path="/colleges" element={<CollegesPage />} />
           <Route path="/scholarships" element={<ScholarshipsPage />} />

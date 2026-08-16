@@ -15,10 +15,9 @@ router.get('/', requireAuth, (req, res) => {
       {n:4, title:"Explore Recommended Courses", desc:"Browse courses recommended for your profile.", status:"pending", cat:"Course", link:"/courses"},
       {n:5, title:"Deep-Dive Into Career Paths", desc:"Explore careers, salary ranges, and 'How Do I Become This?' ladders.", status:"pending", cat:"Career", link:"/careers"},
       {n:6, title:"Find Government Colleges Near You", desc:"Browse government colleges in your district.", status:"pending", cat:"College", link:"/colleges"},
-      {n:7, title:"Compare Top Colleges", desc:"Compare 2-3 colleges side-by-side.", status:"pending", cat:"College", link:"/colleges/compare"},
-      {n:8, title:"Check Scholarship Eligibility", desc:"Review scholarships and check eligibility.", status:"pending", cat:"Scholarship", link:"/scholarships"},
-      {n:9, title:"Save Key Admission Deadlines", desc:"Review the Admission Timeline.", status:"pending", cat:"College", link:"/timeline"},
-      {n:10, title:"Apply to Your Chosen College", desc:"Submit your application before the deadline.", status:"pending", cat:"College", link:"/colleges"},
+      {n:7, title:"Check Scholarship Eligibility", desc:"Review scholarships and check eligibility.", status:"pending", cat:"Scholarship", link:"/scholarships"},
+      {n:8, title:"Save Key Admission Deadlines", desc:"Review the Admission Timeline.", status:"pending", cat:"College", link:"/timeline"},
+      {n:9, title:"Apply to Your Chosen College", desc:"Submit your application before the deadline.", status:"pending", cat:"College", link:"/colleges"},
     ];
 
     // Check profile and assessment to mark completed steps

@@ -135,7 +135,8 @@ export default function RegisterPage() {
                 <Select onValueChange={(v) => set("stream", v)}>
                   <SelectTrigger className={selectCls}><SelectValue placeholder={t("register_select", "Select")} /></SelectTrigger>
                   <SelectContent>
-                    {["Science","Commerce","Arts","Not Selected"].map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
+                    {["Science","Commerce","Arts","Not Selected"].map((s) => <SelectItem key={s} value={s}>{t(`stream_${s.replace(/\s/g,"_")}`, s)}</SelectItem>)}
+
                   </SelectContent>
                 </Select>
               </div>

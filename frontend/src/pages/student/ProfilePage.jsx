@@ -183,7 +183,8 @@ export default function ProfilePage() {
                     <Select value={form.stream} onValueChange={(v) => set("stream", v)}>
                       <SelectTrigger className="h-11"><SelectValue placeholder={t("prof_stream_placeholder")} /></SelectTrigger>
                       <SelectContent>
-                        {["Science", "Commerce", "Arts", "Not Selected"].map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
+                      {["Science", "Commerce", "Arts", "Not Selected"].map((s) => <SelectItem key={s} value={s}>{t(`stream_${s.replace(/\s/g,"_")}`, s)}</SelectItem>)}
+
                       </SelectContent>
                     </Select>
                   </div>
@@ -195,21 +196,22 @@ export default function ProfilePage() {
                 <div className="space-y-2">
                   <Label>{t("prof_subjects")}</Label>
                   <div className="flex flex-wrap gap-2">
-                    {subjects.map((s) => (
-                      <button
-                        key={s}
-                        type="button"
-                        onClick={() => toggleArr("subjects", s)}
-                        className={cn(
-                          "px-3 py-1.5 rounded-full text-sm font-medium border transition-all",
-                          form.subjects.includes(s)
-                            ? "bg-[hsl(226,64%,20%)] text-white border-[hsl(226,64%,20%)]"
-                            : "bg-white text-muted-foreground border-[hsl(220,18%,91%)] hover:border-blue-300"
-                        )}
-                      >
-                        {s}
-                      </button>
-                    ))}
+                      {subjects.map((s) => (
+                        <button
+                          key={s}
+                          type="button"
+                          onClick={() => toggleArr("subjects", s)}
+                          className={cn(
+                            "px-3 py-1.5 rounded-full text-sm font-medium border transition-all",
+                            form.subjects.includes(s)
+                              ? "bg-[hsl(226,64%,20%)] text-white border-[hsl(226,64%,20%)]"
+                              : "bg-white text-muted-foreground border-[hsl(220,18%,91%)] hover:border-blue-300"
+                          )}
+                        >
+                          {t(`subject_${s.replace(/\s/g,"")}`, s)}
+                        </button>
+                      ))}
+
                   </div>
                 </div>
               </div>
@@ -236,9 +238,10 @@ export default function ProfilePage() {
                       <span className="text-xl">
                         {["💻","📐","💼","🎨","🔬","🌍","✨","📣"][interests.indexOf(interest)]}
                       </span>
-                      {interest}
+                      {t(`interest_${interest.replace(/\s/g,"")}`, interest)}
                     </button>
                   ))}
+
                 </div>
               </div>
             )}

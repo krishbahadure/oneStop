@@ -144,8 +144,9 @@ export default function RecommendationsPage() {
                       ₹{((career.salary_min || 0) / 100000).toFixed(1)}–{((career.salary_max || 0) / 100000).toFixed(1)} LPA
                     </span>
                     <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${career.growth_outlook === 'High' ? 'chip-mint' : 'chip-yellow'}`}>
-                      {career.growth_outlook} {t("rec_growth")}
+                      {t(`growth_${career.growth_outlook}`, career.growth_outlook)} {t("growth_label")}
                     </span>
+
                   </div>
                 </div>
               ))}

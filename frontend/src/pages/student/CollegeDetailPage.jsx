@@ -6,22 +6,19 @@ import { Badge } from "@/components/ui/badge";
 import StudentLayout from "@/components/layout/StudentLayout";
 import { EmptyState } from "@/components/common/EmptyState";
 import { PrototypeBadge } from "@/components/common/PrototypeBadge";
-import { useComparison } from "@/hooks/useComparison";
 import { getCollegeById } from "@/data/mock/colleges";
 import { cn } from "@/lib/utils";
 import {
-  Building2, ArrowLeft, MapPin, ArrowRight, GitCompare,
+  Building2, ArrowLeft, MapPin, ArrowRight,
   Wifi, BookOpen, Home, FlaskConical, Dumbbell, Coffee,
   CheckCircle, XCircle, Calendar
 } from "lucide-react";
-import toast from "react-hot-toast";
 
 export default function CollegeDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { t } = useTranslation();
   const college = getCollegeById(id);
-  const { isInComparison, addToComparison, removeFromComparison } = useComparison();
 
   if (!college) {
     return (
@@ -30,19 +27,6 @@ export default function CollegeDetailPage() {
       </StudentLayout>
     );
   }
-
-  const handleCompare = () => {
-    if (isInComparison(college.id)) {
-      removeFromComparison(college.id);
-      toast.success(`${t("college_det_removed")} ${college.shortName} ${t("college_det_from_comp")}`);
-    } else {
-      const added = addToComparison(college.id);
-      if (!added) toast.error(t("college_det_max_comp"));
-      else toast.success(`${t("college_det_added")} ${college.shortName}${t("college_det_go_comp")}`);
-    }
-  };
-
-  const inComparison = isInComparison(college.id);
 
   const facilityIcons = {
     hostel: { icon: Home, label: t("facility_hostel") },
@@ -82,16 +66,6 @@ export default function CollegeDetailPage() {
                     <span className="text-[hsl(220,14%,50%)] text-xs">{t("colleges_est")} {college.established}</span>
                   </div>
                 </div>
-              </div>
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  onClick={handleCompare}
-                  className={cn("bg-white", inComparison && "border-[hsl(252,50%,45%)] text-[hsl(252,50%,45%)]")}
-                >
-                  <GitCompare className="mr-1.5 h-4 w-4" />
-                  {inComparison ? t("college_det_added_comp") : t("college_det_add_comp")}
-                </Button>
               </div>
             </div>
           </div>
@@ -173,7 +147,7 @@ export default function CollegeDetailPage() {
             </div>
           </motion.div>
 
-          {/* CTAs */}
+          {/* CTA */}
           <div className="flex flex-wrap gap-3">
             <Button
               className="bg-[hsl(226,64%,20%)] hover:bg-[hsl(226,64%,15%)] text-white font-semibold gap-2"
@@ -181,14 +155,6 @@ export default function CollegeDetailPage() {
             >
               <Calendar className="h-4 w-4" />
               {t("college_det_view_timeline")}
-            </Button>
-            <Button
-              variant="outline"
-              onClick={handleCompare}
-              className={inComparison ? "border-blue-500 text-[hsl(252,50%,45%)] bg-white" : "bg-white"}
-            >
-              <GitCompare className="mr-1.5 h-4 w-4" />
-              {inComparison ? t("college_det_remove_comp") : t("college_det_add_comp")}
             </Button>
           </div>
         </div>

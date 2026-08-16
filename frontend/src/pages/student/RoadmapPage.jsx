@@ -102,11 +102,13 @@ export default function RoadmapPage() {
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1 flex-wrap">
                           <span className="text-xs font-black text-[hsl(220,14%,55%)]">{t("roadmap_step")} {item.step_number}</span>
-                          <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${catColor}`}>{t(item.category)}</span>
+                          <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${catColor}`}>{t(`cat_${item.category}`, item.category)}</span>
+
                           <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${style.chip}`}>{style.label}</span>
                         </div>
-                        <h3 className="font-bold text-sm text-[hsl(226,64%,14%)] leading-tight">{item.title}</h3>
-                        <p className="text-xs text-[hsl(220,14%,50%)] mt-1 leading-relaxed">{item.description}</p>
+                        <h3 className="font-bold text-sm text-[hsl(226,64%,14%)] leading-tight">{t(`roadmap_step_${item.step_number}_title`, item.title)}</h3>
+                        <p className="text-xs text-[hsl(220,14%,50%)] mt-1 leading-relaxed">{t(`roadmap_step_${item.step_number}_desc`, item.description)}</p>
+
                       </div>
 
                       <div className="flex gap-2 flex-shrink-0">

@@ -53,9 +53,10 @@ export default function CareersPage() {
             <select value={sectorFilter} onChange={e=>setSectorFilter(e.target.value)}
               className="h-10 px-3 border border-[hsl(220,18%,88%)] rounded-lg text-sm bg-white focus:outline-none">
               <option value="">{t("careers_all_sectors")}</option>
-              <option value="Government">{t("careers_gov")}</option>
-              <option value="Private">{t("careers_pvt")}</option>
-              <option value="Both">{t("careers_both")}</option>
+              <option value="Government">{t("sector_Government")}</option>
+              <option value="Private">{t("sector_Private")}</option>
+              <option value="Both">{t("sector_Both")}</option>
+
             </select>
           </div>
 
@@ -82,8 +83,9 @@ export default function CareersPage() {
                       {((career.salary_min||0)/100000).toFixed(1)}–{((career.salary_max||0)/100000).toFixed(1)} LPA
                     </div>
                     <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${career.growth_outlook === 'High' ? 'chip-mint' : 'chip-yellow'}`}>
-                      {career.growth_outlook} {t("rec_growth")}
+                      {t(`growth_${career.growth_outlook}`, career.growth_outlook)} {t("growth_label")}
                     </span>
+
                   </div>
                 </motion.div>
               ))}

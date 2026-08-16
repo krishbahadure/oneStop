@@ -9,8 +9,9 @@ import { PageLoader, PageError } from "@/components/common/PageStates";
 import {
   ArrowRight, BookOpen, Briefcase, Building2, Calendar,
   Award, Library, ClipboardList, AlertCircle, Star,
-  GitCompare, BookMarked, MapPin, Brain, Map,
+  BookMarked, MapPin, Brain, Map,
 } from "lucide-react";
+
 
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 16 },
@@ -35,11 +36,11 @@ export default function DashboardPage() {
     { icon: Star,       title: t("landing_feature2_title"),    desc: t("landing_feature2_desc"),                 chip: "chip-mint" },
     { icon: Map,        title: t("landing_feature3_title"),         desc: t("landing_feature3_desc"),                  chip: "chip-blue" },
     { icon: Building2,  title: t("landing_feature4_title"),       desc: t("landing_feature4_desc"),         chip: "chip-yellow" },
-    { icon: GitCompare, title: t("landing_feature5_title"),              desc: t("landing_feature5_desc"),     chip: "chip-orange" },
     { icon: Award,      title: t("landing_feature6_title"),                    desc: t("landing_feature6_desc"),            chip: "chip-peach" },
     { icon: Calendar,   title: t("landing_feature7_title"),              desc: t("landing_feature7_desc"),        chip: "chip-orange" },
     { icon: BookMarked, title: t("landing_feature8_title"),              desc: t("landing_feature8_desc"), chip: "chip-lavender" },
   ];
+
 
   if (loading) return <StudentLayout><PageLoader message={t("dash_loading")} /></StudentLayout>;
   if (error) return <StudentLayout><PageError error={error} onRetry={refetch} /></StudentLayout>;
@@ -142,7 +143,7 @@ export default function DashboardPage() {
                             <div className={`h-full rounded-full ${cfg.progressClass}`} style={{ width: `${course.matchPercent || 0}%` }} />
                           </div>
                           <Button size="sm" variant="outline" onClick={() => navigate(`/courses/${course.id}`)} className="w-full text-xs border-[hsl(220,18%,88%)] text-[hsl(226,64%,20%)] hover:bg-[hsl(36,25%,96%)] font-semibold">
-                            {t("dash_explore")}
+                           {t("explore")}
                           </Button>
                         </div>
                       );
@@ -251,7 +252,6 @@ export default function DashboardPage() {
                       { label: t("roadmap", "My Roadmap"), path: "/roadmap", chip: "chip-lavender" },
                       { label: t("scholarships", "Scholarships"), path: "/scholarships", chip: "chip-mint" },
                       { label: t("resources", "Resources"), path: "/resources", chip: "chip-yellow" },
-                      { label: t("compareColleges", "Compare Colleges"), path: "/colleges/compare", chip: "chip-blue" },
                     ].map(link => (
                       <button key={link.path} onClick={() => navigate(link.path)}
                         className="w-full text-left flex items-center justify-between px-3 py-2 rounded-lg hover:bg-[hsl(220,18%,96%)] transition-colors group">

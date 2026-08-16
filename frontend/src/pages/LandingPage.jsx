@@ -7,8 +7,9 @@ import Footer from "@/components/landing/Footer";
 import {
   BookOpen, Building2, Briefcase, Award,
   ArrowRight, CheckCircle2, Brain, Star,
-  Map, GitCompare, Calendar, BookMarked,
+  Map, Calendar, BookMarked,
 } from "lucide-react";
+
 
 /* ─── Data ──────────────────────────────────────── */
 const fadeUp = {
@@ -34,11 +35,11 @@ export default function LandingPage() {
     { icon: Star,       title: t("landing_feature2_title"),      desc: t("landing_feature2_desc"),                 chip: "chip-mint"     },
     { icon: Map,        title: t("landing_feature3_title"),           desc: t("landing_feature3_desc"),                  chip: "chip-blue"     },
     { icon: Building2,  title: t("landing_feature4_title"),         desc: t("landing_feature4_desc"),         chip: "chip-yellow"   },
-    { icon: GitCompare, title: t("landing_feature5_title"),                desc: t("landing_feature5_desc"),     chip: "chip-orange"   },
     { icon: Award,      title: t("landing_feature6_title"),                      desc: t("landing_feature6_desc"),            chip: "chip-peach"    },
     { icon: Calendar,   title: t("landing_feature7_title"),                desc: t("landing_feature7_desc"),        chip: "chip-orange"   },
     { icon: BookMarked, title: t("landing_feature8_title"),                desc: t("landing_feature8_desc"), chip: "chip-lavender" },
   ];
+
 
   /* Feature chips shown alongside the illustration */
   const heroFeatureCards = [

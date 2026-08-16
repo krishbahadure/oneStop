@@ -62,8 +62,9 @@ export default function TimelinePage() {
             <p className="text-xs font-semibold text-[hsl(22,80%,40%)] mt-1">{event.daysLeft} {t("timeline_days_remaining")}</p>
           )}
           {event.category && (
-            <span className="mt-1 inline-block text-[10px] bg-[hsl(220,18%,95%)] text-[hsl(220,14%,40%)] px-2 py-0.5 rounded-md">{event.category}</span>
+            <span className="mt-1 inline-block text-[10px] bg-[hsl(220,18%,95%)] text-[hsl(220,14%,40%)] px-2 py-0.5 rounded-md">{t(`timeline_cat_${event.category}`, event.category)}</span>
           )}
+
         </div>
       </div>
     );
