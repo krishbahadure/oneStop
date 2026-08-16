@@ -34,9 +34,9 @@ router.put('/', requireAuth, (req, res) => {
       family_income=excluded.family_income, gender=excluded.gender, category=excluded.category,
       profile_completed=1, updated_at=excluded.updated_at
   `).run(
-    req.user.id, phone, district, board, class_10_percent, class_12_percent,
-    class_12_stream, JSON.stringify(interested_streams || []),
-    JSON.stringify(hobbies || []), career_goals, family_income, gender, category,
+    req.user.id, phone ?? null, district ?? null, board ?? null, class_10_percent ?? null, class_12_percent ?? null,
+    class_12_stream ?? null, JSON.stringify(interested_streams || []),
+    JSON.stringify(hobbies || []), career_goals ?? null, family_income ?? null, gender ?? null, category ?? null,
     new Date().toISOString()
   );
 
